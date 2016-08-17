@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<h3 class="text-center">This post was submitted by {{post.author.username}}</h2>
+<h3 class="text-center">Submitted on {{post.created.strftime("%b %d, %Y")}}</h3>
+<p class="lead">{{post.subject | safe}}</p>
+<p>{{post.content | safe}}</p>
+
+<form method="post" class="form-horizontal" role="form">
+    <div class="col-sm-3">
+        <button type="submit" class="btn btn-default">Delete Post</button>
+    </div>
+    <div class="col-sm-3">
+    <a href="/" class="btn btn-default">Cancel</a>
+    </div>
+</form>
+{% endblock %}

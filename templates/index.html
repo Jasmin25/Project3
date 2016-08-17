@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+{% for post in posts %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h5 class="text-center">{{post.author.username}} submitted this post on {{post.created.strftime("%b %d, %Y")}}</h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <div class="jumbotron">
+                <h2>{{post.subject}}</h2>
+                <h4>{{post.content}}</h4>
+                <br>
+                <a class="btn btn-primary" href="/{{ post.key.id() }}"> Read more</a>
+                {% if post.author.username == user.username %}
+                    <a class="btn btn-default" href="/edit?post={{ post.key.id() }}"> Edit</a>
+                    <a class="btn btn-default" href="/delete?post={{ post.key.id() }}"> Delete</a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

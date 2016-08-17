@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<h3 class="text-center">Edit Comment</h3>
+<form method="post" class="form-horizontal" role="form">
+    <textarea name="content">{{content}}</textarea>
+    {% if error %}
+    <div class="alert alert-danger">{{error}}</div>
+    {% endif %}
+    <button class="btn btn-default" type="submit">Edit Comment</button>
+</form>
+<a class="btn btn-default" href="/{{post_id}}"> Cancel</a>
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <h4 class="text-center">This post was submitted by {{post.author.username}} on {{post.created.strftime("%b %d, %Y")}}</h4>
+            <h2 class="text-center">Subject: <u>{{post.subject | safe}}</u></h2>
+            <div class="panel panel-success">
+                <div class="panel-body">
+                    <p class="text-left">{{post.content | safe}}</p>
+                </div>
+            </div>
+
+            <!-- like/unlike section  -->
+            <div class="likes">
+            {% if user.username and user.username != post.author.username %}
+                {% if not liked %}
+                    <form method="post" action="?like=True">
+                      <button class="btn btn-default glyphicon glyphicon-thumbs-up" type="submit"> Like</button>
+                      {{post.likes}} people like this
+                    </form>
+                  {% else %}
+                    <form method="post" action="?unlike=True">
+                      <button class="btn btn-default glyphicon glyphicon-thumbs-down" type="submit"> Unlike</button>
+                      {{post.likes}} people like this
+                    </form>
+                  {% endif %}
+                {% endif %}
+            </div>
+
+            <!-- comments section-->
+            <h3 class="text-center">Comments</h3>
+            {% for comment in comments %}
+                <div class="panel panel-info">
+                    <div class="panel-heading">{{comment.author.username}} commented:</div>
+                    <div class="panel-body">{{comment.content}}<br><br>
+                    {% if comment.author.username == user.username %}
+                            <a class="btn btn-default" href="/comment/edit?comment={{ comment.key.id() }}"> Edit</a>
+                            <a class="btn btn-default" href="/comment/delete?comment={{ comment.key.id() }}"> Delete</a>
+                    {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+
+            <!-- add new comment section -->
+            {% if user.username %}
+                <form method="post" class="form-horizontal" role="form">
+                    <textarea name="content">{{content}}</textarea>
+                    {% if error %}
+                        <div class="alert alert-danger">{{error}}</div>
+                    {% endif %}
+                    <br>
+                    <button class="btn btn-default" type="submit">Add Comment</button>
+                </form>
+            {% endif %}
+            <br><br>
+            <a class="btn btn-default glyphicon glyphicon-arrow-left" href="/"> Back</a>
+            </div>
+        <div class="col-md-1"></div>
+    </div>
+    </div>
+</div>
+
+{% endblock %}
