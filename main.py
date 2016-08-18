@@ -252,7 +252,7 @@ class NewPost(BlogHandler):
 
     def post(self):
         if not self.user:
-            self.redirect("/")
+            self.redirect("/login")
         self.subject = self.request.get("subject")
         self.content = self.request.get("content")
         if self.subject and self.content:
@@ -343,23 +343,26 @@ class EditPost(BlogHandler):
         self.post_id = self.request.get("post")
         key = ndb.Key('Post', int(self.post_id), parent=blog_key())
         post = key.get()
-        if post and post.author.username == self.user.username:
-            self.subject = self.request.get("subject")
-            self.content = self.request.get("content")
-            if self.subject and self.content:
-                post.subject = self.subject
-                post.content = self.content
-                post.put()
-                self.redirect("/")
+        if self.user:
+            if post and post.author.username == self.user.username:
+                self.subject = self.request.get("subject")
+                self.content = self.request.get("content")
+                if self.subject and self.content:
+                    post.subject = self.subject
+                    post.content = self.content
+                    post.put()
+                    self.redirect("/")
+                else:
+                    error = "you need both a subject and content"
+                    self.render("post_edit.html",
+                                post=post,
+                                subject=self.subject,
+                                content=self.content,
+                                error=error)
             else:
-                error = "you need both a subject and content"
-                self.render("post_edit.html",
-                            post=post,
-                            subject=self.subject,
-                            content=self.content,
-                            error=error)
+                self.redirect("/")
         else:
-            self.redirect("/")
+            self.redirect("/login")
 
 
 class DeletePost(BlogHandler):
